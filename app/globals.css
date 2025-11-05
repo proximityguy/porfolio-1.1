@@ -74,3 +74,24 @@ html {
   transform: translateY(-10px);
   box-shadow: 0 20px 40px rgba(247, 92, 126, 0.3);
 }
+
+/* Mobile Menu Styling */
+.mobile-menu-item {
+  position: relative;
+  overflow: hidden;
+}
+
+.mobile-menu-item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  transition: width 0.3s ease;
+}
+
+.mobile-menu-item:hover::before {
+  width: 100%;
+}

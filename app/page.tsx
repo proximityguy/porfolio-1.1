@@ -1,11 +1,18 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { TypeAnimation } from 'react-type-animation';
-import { FaGithub, FaLinkedin, FaEnvelope, FaArrowDown } from 'react-icons/fa';
+import { FaGithub, FaLinkedin, FaEnvelope, FaArrowDown, FaBars, FaTimes } from 'react-icons/fa';
 import Image from 'next/image';
+import { useState } from 'react';
 
 export default function Home() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuItems = ['Dashboard', 'About', 'Skills', 'Experience', 'Projects', 'Contact'];
+
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const closeMenu = () => setIsMenuOpen(false);
+
   return (
     <main className="min-h-screen">
       {/* Navigation */}
@@ -18,13 +25,16 @@ export default function Home() {
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <motion.a
             href="#top"
+            onClick={closeMenu}
             className="text-xl md:text-2xl font-bold gradient-text cursor-pointer"
             whileHover={{ scale: 1.05 }}
           >
             Manish Kumar
           </motion.a>
-          <div className="flex gap-3 md:gap-6 text-sm md:text-base">
-            {['Dashboard', 'About', 'Skills', 'Experience', 'Projects', 'Contact'].map((item, i) => (
+
+          {/* Desktop Menu */}
+          <div className="hidden md:flex gap-6 text-base">
+            {menuItems.map((item, i) => (
               <motion.a
                 key={item}
                 href={item === 'Dashboard' ? '#top' : `#${item.toLowerCase()}`}
@@ -38,7 +48,47 @@ export default function Home() {
               </motion.a>
             ))}
           </div>
+
+          {/* Mobile Menu Button */}
+          <motion.button
+            className="md:hidden text-2xl text-gray-300 hover:text-primary transition-colors"
+            onClick={toggleMenu}
+            whileTap={{ scale: 0.9 }}
+            aria-label="Toggle menu"
+          >
+            {isMenuOpen ? <FaTimes /> : <FaBars />}
+          </motion.button>
         </div>
+
+        {/* Mobile Menu */}
+        <AnimatePresence>
+          {isMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+              className="md:hidden overflow-hidden"
+            >
+              <div className="flex flex-col gap-4 pt-4 pb-2">
+                {menuItems.map((item, i) => (
+                  <motion.a
+                    key={item}
+                    href={item === 'Dashboard' ? '#top' : `#${item.toLowerCase()}`}
+                    onClick={closeMenu}
+                    className="text-gray-300 hover:text-primary transition-colors text-base py-2 border-b border-gray-700 hover:border-primary"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    {item}
+                  </motion.a>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.nav>
 
       {/* Hero Section */}

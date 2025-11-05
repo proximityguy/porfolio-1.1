@@ -83,6 +83,7 @@ This project is open source and available under the MIT License.
 ## 👨‍💻 Author
 
 **Manish Kumar**
+
 - GitHub: [@proximityguy](https://github.com/proximityguy)
 - LinkedIn: [proximityguy](https://www.linkedin.com/in/proximityguy)
 - Email: manishgenius2513@gmail.com
