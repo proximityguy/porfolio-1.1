@@ -4,14 +4,29 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { TypeAnimation } from 'react-type-animation';
 import { FaGithub, FaLinkedin, FaEnvelope, FaArrowDown, FaBars, FaTimes } from 'react-icons/fa';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [theme, setTheme] = useState<string>('dark');
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const attr = document.documentElement.getAttribute('data-theme');
+      if (attr) setTheme(attr);
+    }
+  }, []);
   const menuItems = ['Dashboard', 'About', 'Skills', 'Experience', 'Projects', 'Contact'];
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => setIsMenuOpen(false);
+  const toggleTheme = () => {
+    const next = theme === 'dark' ? 'light' : 'dark';
+    setTheme(next);
+    if (typeof window !== 'undefined') {
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    }
+  };
 
   return (
     <main className="min-h-screen">
@@ -47,6 +62,15 @@ export default function Home() {
                 {item}
               </motion.a>
             ))}
+            <motion.button
+              onClick={toggleTheme}
+              className="glass px-3 py-1 rounded-full text-sm hover:glow"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              aria-label="Toggle theme"
+            >
+              {theme === 'dark' ? '🌞 Light' : '🌙 Dark'}
+            </motion.button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -57,6 +81,15 @@ export default function Home() {
             aria-label="Toggle menu"
           >
             {isMenuOpen ? <FaTimes /> : <FaBars />}
+          </motion.button>
+          {/* Mobile Theme Toggle */}
+          <motion.button
+            className="md:hidden ml-3 text-sm glass px-3 py-1 rounded-full hover:glow"
+            onClick={toggleTheme}
+            whileTap={{ scale: 0.95 }}
+            aria-label="Toggle theme"
+          >
+            {theme === 'dark' ? '🌞' : '🌙'}
           </motion.button>
         </div>
 
@@ -189,20 +222,11 @@ export default function Home() {
             transition={{ duration: 0.8 }}
           >
             <motion.div
-              className="w-full h-[400px] md:h-[500px] glass rounded-3xl p-8 flex items-center justify-center"
-              animate={{ y: [0, -20, 0] }}
-              transition={{ duration: 3, repeat: Infinity }}
+              className="w-full h-[400px] md:h-[500px] glass hero-image-frame rounded-3xl overflow-hidden flex items-center justify-center"
+              animate={{ y: [0, -10, 0] }}
+              transition={{ duration: 4, repeat: Infinity }}
             >
-              <div className="text-center">
-                <motion.div
-                  className="text-7xl md:text-9xl mb-4"
-                  animate={{ rotate: [0, 10, -10, 0] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                >
-                  🚀
-                </motion.div>
-                <p className="text-xl md:text-2xl gradient-text font-bold">Building the Future</p>
-              </div>
+              <img src="/my_img.png" alt="Portrait of Manish Kumar" className="themed-image" />
             </motion.div>
           </motion.div>
         </div>

@@ -13,7 +13,23 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        {/* Set theme before React hydration to avoid FOUC */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+            (function(){
+              try {
+                var stored = localStorage.getItem('theme');
+                var theme = stored || 'dark';
+                document.documentElement.setAttribute('data-theme', theme);
+              } catch (e) { /* noop */ }
+            })();
+          `,
+          }}
+        />
+        {children}
+      </body>
     </html>
   )
 }
